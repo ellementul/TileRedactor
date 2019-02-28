@@ -3,18 +3,41 @@ var Map = Array.create(Array.create.bind(null, null, 20), 20);
 
 function CrLogic(Draw){
 	var current_tile = null;
+	var current_objs = null;
 	
 	this.addTileset = function(Tileset){
+		var objs = Tileset.tiles.filter(tile => tile.type == "phisic");
+		var ObjSet = Object.assign({}, Tileset);
+		ObjSet.tiles = objs;
+
+		Tileset.tiles = Tileset.tiles.filter(tile => tile.type != "phisic");
+
+		console.log(Tileset, ObjSet);
+
 		Tileset.id = Tilesets.add(Tileset);
 		Draw.tiles.add(Tileset);
+
+		ObjSet.id = Tilesets.add(ObjSet);
+		Draw.objects.add(ObjSet);
 	}
 	
 	this.changeTile = function(id_categ, id_tile){
 		current_tile = Tilesets[id_categ].tiles[id_tile];
 		
-		if(!current_tile.width) current_tile.width = Tilesets[id_categ].width;
-		if(!current_tile.height) current_tile.height = Tilesets[id_categ].height;
+		defSize(current_tile, id_categ)
 		
+	}
+
+	this.changeObjs = function(id_categ, id_tile){
+		current_objs = Tilesets[id_categ].tiles[id_tile];
+		
+		defSize(current_objs, id_categ);
+		
+	}
+
+	function defSize(tile, id_categ){
+		if(!tile.width) tile.width = Tilesets[id_categ].width;
+		if(!tile.height) tile.height = Tilesets[id_categ].height;
 	}
 	
 	this.fill = function(beg, end){

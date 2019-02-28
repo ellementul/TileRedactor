@@ -1,7 +1,13 @@
 const Hear = require("./Events.js");
 
 function CrController(Logic, Draw){
-	Hear("Categs", "click", function(event){
+
+	var switchAct = Draw.crSwitch("Tiles", "Objects", "invis");
+	Hear("switchAct", "click", function(){
+		switchAct();
+	})
+
+	Hear("Tiles", "click", function(event){
 		if(event.target.swit) event.target.swit();
 		
 		if(event.target.getAttribute("tile") !== null){

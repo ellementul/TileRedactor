@@ -3,6 +3,7 @@ const RGB = require('chromath').rgb;
 
 var id_map = "Map";
 var id_tiles = "Tiles";
+var id_objects = "Objects";
 var id_pallet = "Pallet";
 
 function CrMap(){
@@ -40,8 +41,8 @@ function CrMap(){
 	
 }
 
-function CrTiles(){
-	var container = getNode(id_tiles);
+function CrTiles(id_container){
+	var container = getNode(id_container);
 	
 	this.add = function(Tileset){
 		var categ = drawCateg(Tileset);
@@ -49,20 +50,22 @@ function CrTiles(){
 	}
 }
 
-function CrPallet(){
+/*function CrPallet(){
 	var container = getNode(id_pallet);
 	
 	this.add = function(categ, tile){
 		container.appendChild(drawTile(tile));
 	}
-}
+}*/
 
 
 module.exports = {
 	map: new CrMap(), 
-	tiles: new CrTiles(),
+	tiles: new CrTiles(id_tiles),
+	objects: new CrTiles(id_objects),
 	openJSON: OpenFileJSON,
-	save: Save
+	save: Save,
+	crSwitch: CrSwitchTwo
 };
 
 function drawGrid(container, grid_size){
@@ -110,10 +113,12 @@ function Save(name, text){
 	FileSaver.saveAs(blob, name);
 }
 
-function CrSwitch(id, name_class){
+function CrSwitchTwo(id, first_id, name_class){
 	var elem = getNode(id).classList;
+	var first_elem = getNode(first_id).classList;
 	return function(){
 		elem.toggle(name_class);
+		first_elem.toggle(name_class);
 	}
 }
 
@@ -155,19 +160,19 @@ function drawTiles(tiles){
 function drawTile(new_tile){
 	
 	if(new_tile.type == "color"){
-		var Tile = document.createElement('div');
-		Tile.classList.add("tile");
-		Tile.setAttribute("tile", new_tile.id);
-		Tile.style.backgroundColor = new RGB(new_tile.color).toString();
-		return Tile;
+		var img = document.createElement('div');
+		img.style.backgroundColor = new RGB(new_tile.color).toString();
 	}
-	if(new_tile.type == "svg"){
+	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
-		img.classList.add("tile");
-		img.setAttribute("tile", new_tile.id);
 		img.src = new_tile.img;
-		return img;
 	}
+
+	img.classList.add("tile");
+	img.setAttribute("tile", new_tile.id);
+	img.setAttribute("draggable", true);
+	
+	return img;
 }
 
 function getNode(id){
