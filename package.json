@@ -1,0 +1,23 @@
+{
+  "name": "RedactorMap",
+  "version": "0.1.0",
+  "description": "redactor tiles map",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ./main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "redactor",
+    "map",
+    "tiles"
+  ],
+  "author": "ellementul",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "chromath": "0.0.7",
+    "file-saver": "^2.0.0",
+    "typesjs": "https://github.com/ellementul/typesjs"
+  }
+}
