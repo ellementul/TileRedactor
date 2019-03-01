@@ -59,11 +59,13 @@ function CrLogic(Draw){
 	function drawTile(x, y, tile){
 		x = Math.floor(x);
 		y = Math.floor(y);
+
+		var box = {tile: tile};
 		
 		for(var i = 0; i < tile.width; i++){
 			for(var j = 0; j < tile.height; j++){
 				
-				Map[j+y][i+x] = tile;
+				Map[j+y][i+x] = box;
 			}
 		}
 		

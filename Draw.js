@@ -2,15 +2,15 @@ require("typesjs");
 const RGB = require('chromath').rgb;
 
 var id_map = "Map";
+var id_grid = "Grid";
 var id_tiles = "Tiles";
 var id_objects = "Objects";
 var id_pallet = "Pallet";
 
-function CrMap(){
+var size = 20;
+
+function CrMap(id_map, size){
 	var container = getNode(id_map);
-	var size = 20;
-	
-	drawGrid(container, size);
 	
 	this.add = function(new_tile, x, y){
 		var tile = drawTile(new_tile);
@@ -58,9 +58,10 @@ function CrTiles(id_container){
 	}
 }*/
 
+drawGrid(getNode(id_grid), size);
 
 module.exports = {
-	map: new CrMap(), 
+	map: new CrMap(id_map, size), 
 	tiles: new CrTiles(id_tiles),
 	objects: new CrTiles(id_objects),
 	openJSON: OpenFileJSON,
