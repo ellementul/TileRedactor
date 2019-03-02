@@ -4,13 +4,24 @@ var Map = Array.create(Array.create.bind(null, null, 20), 20);
 function CrLogic(Draw){
 	var current_tile = null;
 	var current_objs = null;
+
+	var switchSpace = false;
 	
 	this.addTileset = function(Tileset){
-		var objs = Tileset.tiles.filter(tile => tile.type == "phisic");
+		var objs = [];
+		var tiles = [];
+
+		Tileset.tiles.forEach(function(tile, id){
+			if(tile.type != "phisic")
+				tile.id = tiles.push(tile) - 1;
+			else
+				tile.id = objs.push(tile) - 1;
+		});
+
 		var ObjSet = Object.assign({}, Tileset);
 		ObjSet.tiles = objs;
 
-		Tileset.tiles = Tileset.tiles.filter(tile => tile.type != "phisic");
+		Tileset.tiles = tiles;
 
 		console.log(Tileset, ObjSet);
 
@@ -20,19 +31,28 @@ function CrLogic(Draw){
 		ObjSet.id = Tilesets.add(ObjSet);
 		Draw.objects.add(ObjSet);
 	}
+
+	this.switchSpace = function(){
+		switchSpace = !switchSpace;
+
+		if(!switchSpace && current_tile)
+			Draw.pallet.change(current_tile);
+		else if(current_objs) 
+			Draw.pallet.change(current_objs);
+	}
 	
 	this.changeTile = function(id_categ, id_tile){
 		current_tile = Tilesets[id_categ].tiles[id_tile];
 		
 		defSize(current_tile, id_categ)
-		
+		Draw.pallet.change(current_tile);
 	}
 
 	this.changeObjs = function(id_categ, id_tile){
 		current_objs = Tilesets[id_categ].tiles[id_tile];
 		
 		defSize(current_objs, id_categ);
-		
+		Draw.pallet.change(current_objs);
 	}
 
 	function defSize(tile, id_categ){
@@ -40,7 +60,14 @@ function CrLogic(Draw){
 		if(!tile.height) tile.height = Tilesets[id_categ].height;
 	}
 	
-	this.fill = function(beg, end){
+	this.draw = function(beg, end){
+		if(!switchSpace){
+			fill(beg, end);
+		}
+
+	}
+
+	function fill(beg, end){
 		if(current_tile){
 			
 			var inc_x = current_tile.width;
@@ -60,7 +87,7 @@ function CrLogic(Draw){
 		x = Math.floor(x);
 		y = Math.floor(y);
 
-		var box = {tile: tile};
+		var box = {tile: tile, x: x, y: y};
 		
 		for(var i = 0; i < tile.width; i++){
 			for(var j = 0; j < tile.height; j++){

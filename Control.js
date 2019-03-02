@@ -5,6 +5,7 @@ function CrController(Logic, Draw){
 	var switchAct = Draw.crSwitch("invis", ["Tiles", "Objects"]);
 	Hear("switchAct", "click", function(){
 		switchAct();
+		Logic.switchSpace();
 	})
 
 	Hear("Tiles", "click", function(event){
@@ -14,17 +15,25 @@ function CrController(Logic, Draw){
 			Logic.changeTile(event.target.parentElement.getAttribute("categ"), event.target.getAttribute("tile"));
 		}
 	});
+
+	Hear("Objects", "click", function(event){
+		if(event.target.swit) event.target.swit();
+		
+		if(event.target.getAttribute("tile") !== null){
+			Logic.changeObjs(event.target.parentElement.getAttribute("categ"), event.target.getAttribute("tile"));
+		}
+	});
 	
 	Hear("Add", "change", Draw.openJSON(Logic.addTileset));
 	
 	var cursorLine = null;
-	Hear("switchGrid", "click", Draw.crSwitch("grid-invis", "Grid"));
+	Hear("switchGrid", "click", Draw.crSwitch("grid", "Grid"));
 	
 	Hear("Grid", "mousedown", function(event){
 		cursorLine = [event.target.x, event.target.y];
 	});
 	Hear("Grid", "mouseup", function(event){
-		Logic.fill(cursorLine, [event.target.x, event.target.y]);
+		Logic.draw(cursorLine, [event.target.x, event.target.y]);
 		cursorLine = null;
 	});
 	Hear("Grid", "dragstart", function(event){
