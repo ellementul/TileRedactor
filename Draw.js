@@ -66,7 +66,7 @@ module.exports = {
 	objects: new CrTiles(id_objects),
 	openJSON: OpenFileJSON,
 	save: Save,
-	crSwitch: CrSwitchTwo
+	crSwitch:  require("./Switch.js")
 };
 
 function drawGrid(container, grid_size){

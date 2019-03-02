@@ -2,7 +2,7 @@ const Hear = require("./Events.js");
 
 function CrController(Logic, Draw){
 
-	var switchAct = Draw.crSwitch("Tiles", "Objects", "invis");
+	var switchAct = Draw.crSwitch("invis", ["Tiles", "Objects"]);
 	Hear("switchAct", "click", function(){
 		switchAct();
 	})
@@ -18,9 +18,7 @@ function CrController(Logic, Draw){
 	Hear("Add", "change", Draw.openJSON(Logic.addTileset));
 	
 	var cursorLine = null;
-	Hear("switchGrid", "click", function(){
-		getNode("Grid").classList.toggle("grid-invis");
-	})
+	Hear("switchGrid", "click", Draw.crSwitch("grid-invis", "Grid"));
 	
 	Hear("Grid", "mousedown", function(event){
 		cursorLine = [event.target.x, event.target.y];
