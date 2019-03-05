@@ -33,7 +33,11 @@ module.exports = function(Logic){
 		cursorLine = [event.target.x, event.target.y];
 	});
 	Hear("Grid", "mouseup", function(event){
-		Logic.draw(cursorLine, [event.target.x, event.target.y]);
+		if(event.ctrlKey)
+			Logic.clear(cursorLine, [event.target.x, event.target.y]);
+		else
+			Logic.draw(cursorLine, [event.target.x, event.target.y]);
+
 		cursorLine = null;
 	});
 	

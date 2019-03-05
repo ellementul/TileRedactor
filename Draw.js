@@ -16,6 +16,7 @@ var size = 20;
 function CrSpace(id_map, size){
 	var container = getNode(id_map);
 	
+	var coord_arr_tiles = Array.create(Array.create.bind(null, null, 20), 20);
 	this.add = function(new_tile, x, y){
 		var tile = drawTile(new_tile);
 		tile.style.width = (new_tile.width * (100 / size)) + "%";
@@ -25,8 +26,12 @@ function CrSpace(id_map, size){
 		tile.style.top = (y * (100 / size)) + "%";
 		
 		container.appendChild(tile);
+		coord_arr_tiles[x][y] = tile;
 	}
-	
+	this.dell = function(box){
+		coord_arr_tiles[box.x][box.y].remove();
+		coord_arr_tiles[box.x][box.y] = null;
+	}
 	
 	function NormTile(tile){
 		var box = getComputedStyle(tile);
@@ -65,16 +70,30 @@ function CrPallet(){
 	}
 }
 
+function appendTile(tile, x, y){
+	if(tile.durability) 
+		this.boxs.add(tile, x, y);
+	else
+		this.map.add(tile, x, y);
+}
+
+function removeTile(box){
+	if(box.tile.durability) 
+		this.boxs.dell(box);
+	else
+		console.log("!!!!!!");
+}
+
 drawGrid(getNode(id_grid), size);
 
  var Draw = {
 	map: new CrSpace(id_ground, size),
 	boxs: new CrSpace(id_boxs, size),
+	append: appendTile,
+	remove: removeTile,
 	pallet: new CrPallet(id_pallet),
 	tiles: new CrTiles(id_tiles),
 	objects: new CrTiles(id_objects),
-	openJSON: OpenFileJSON,
-	save: Save,
 	crSwitch:  require("./Switch.js")
 };
 CrSwitches(Draw);
@@ -102,22 +121,6 @@ function darwBox(x, y, size){
 	box.style.top = y + "%";
 	
 	return box;
-}
-
-function OpenFileJSON(Open){
-	return function(){
-		if(this.files[0]){
-			var name = this.files[0].name;
-			var reader = new FileReader();
-			
-			reader.onload = function(e){
-				var file = JSON.parse(e.target.result);
-				file.name = name;
-				Open(file);
-			};
-			reader.readAsText(this.files[0]);
-		}
-	}
 }
 
 

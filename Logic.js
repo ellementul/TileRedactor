@@ -1,7 +1,8 @@
 const Files = require("./SysFiles.js");
 
 var Tilesets = [];
-var Map = Array.create(Array.create.bind(null, null, 20), 20);
+var Ground = Array.create(Array.create.bind(null, null, 20), 20);
+var Objects = Array.create(Array.create.bind(null, null, 20), 20);
 
 function CrLogic(Draw){
 	var current_tile = null;
@@ -46,11 +47,21 @@ function CrLogic(Draw){
 	}
 	
 	this.draw = function(beg, end){
-		if(!switchSpace){
-			fill(beg, end);
-		}
+		if(!switchSpace && current_tile)
+			fill(Ground, current_tile, beg, end);
+	
+		else if(is_empty(Objects, beg, end) && current_objs)
+			fill(Objects, current_objs, beg, end);
 
 	}
+	this.clear = function(beg, end){
+		if(!switchSpace)
+			console.log("!!!!!!!!");
+		else 
+			clear(Objects, beg, end);
+	}
+
+
 	function addTileset(Tileset){
 		var objs = [];
 		var tiles = [];
@@ -76,23 +87,44 @@ function CrLogic(Draw){
 		Draw.objects.add(ObjSet);
 	}
 
-	function fill(beg, end){
-		if(current_tile){
+	function fill(Map, tile, beg, end){
 			
-			var inc_x = current_tile.width;
-			var inc_y = current_tile.height;
+			var inc_x = tile.width;
+			var inc_y = tile.height;
 			
 			for(var i = beg[0]; i + inc_x <= end[0] + 1; i = i + inc_x){
 				for(var j = beg[1]; j + inc_y <= end[1] + 1; j = j + inc_y){
-					drawTile(i, j, current_tile);
+					drawTile(Map, i, j, tile);
 				}
 			}
 			
+	}
+	function clear(Map, beg, end){
 			
+		for(var i = beg[0]; i <= end[0]; i++){
+			for(var j = beg[1]; j <= end[1]; j++){
+				if(Map[j][i] !== null){
+					dellTile(Map, Map[j][i]);
+				}
+			}
 		}
+			
+	}
+
+	function is_empty(Map, beg, end){
+		var empty = true;
+
+		for(var i = beg[0]; i <= end[0]; i++){
+			for(var j = beg[1]; j <= end[1]; j++){
+				empty = empty && (Map[j][i] == null);
+				if(!empty) return empty;
+			}
+		}
+
+		return empty;
 	}
 	
-	function drawTile(x, y, tile){
+	function drawTile(Map, x, y, tile){
 		x = Math.floor(x);
 		y = Math.floor(y);
 
@@ -105,7 +137,19 @@ function CrLogic(Draw){
 			}
 		}
 		
-		Draw.map.add(tile, x, y);
+		Draw.append(tile, x, y);
+	}
+
+	function dellTile(Map, box){
+		
+		for(var i = 0; i < box.tile.width; i++){
+			for(var j = 0; j < box.tile.height; j++){
+				
+				Map[j+box.y][i+box.x] = null;
+			}
+		}
+		
+		Draw.remove(box);
 	}
 }
 
