@@ -1,5 +1,6 @@
 require("typesjs");
 const RGB = require('chromath').rgb;
+var Base64 = require('js-base64').Base64;
 
 var id_ground = "Ground";
 var id_boxs = "Boxs";
@@ -115,6 +116,8 @@ function OpenFileJSON(Open){
 	}
 }
 
+
+
 function Save(name, text){
 	var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
 	FileSaver.saveAs(blob, name);
@@ -172,7 +175,7 @@ function drawTile(new_tile){
 	}
 	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
-		img.src = new_tile.img;
+		img.src = "data:image/svg+xml;base64,"+ Base64.encode(new_tile.img);
 	}
 
 	img.classList.add("tile");
