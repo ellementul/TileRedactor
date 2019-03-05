@@ -2,6 +2,8 @@ require("typesjs");
 const RGB = require('chromath').rgb;
 var Base64 = require('js-base64').Base64;
 
+const CrSwitches = require("./CrSwitches.js");
+
 var id_ground = "Ground";
 var id_boxs = "Boxs";
 var id_grid = "Grid";
@@ -65,7 +67,7 @@ function CrPallet(){
 
 drawGrid(getNode(id_grid), size);
 
-module.exports = {
+ var Draw = {
 	map: new CrSpace(id_ground, size),
 	boxs: new CrSpace(id_boxs, size),
 	pallet: new CrPallet(id_pallet),
@@ -75,6 +77,8 @@ module.exports = {
 	save: Save,
 	crSwitch:  require("./Switch.js")
 };
+CrSwitches(Draw);
+module.exports = Draw;
 
 function drawGrid(container, grid_size){
 		var size = 100 / grid_size;

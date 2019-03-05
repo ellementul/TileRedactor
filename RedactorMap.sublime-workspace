@@ -63,7 +63,7 @@
 			"file": "Draw.js",
 			"settings":
 			{
-				"buffer_size": 4305,
+				"buffer_size": 4347,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -81,16 +81,20 @@
 		"selected_items":
 		[
 			[
+				"c",
+				"Git: Commit"
+			],
+			[
+				"a",
+				"Git: Add All"
+			],
+			[
 				"com",
 				"Git: Commit"
 			],
 			[
 				"add",
 				"Git: Add All"
-			],
-			[
-				"c",
-				"Git: Commit"
 			],
 			[
 				"ad",
@@ -361,15 +365,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4305,
+						"buffer_size": 4347,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4048,
-								4048
+								98,
+								98
 							]
 						],
 						"settings":

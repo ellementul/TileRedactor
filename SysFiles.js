@@ -1,15 +1,19 @@
+var FileSaver = require('file-saver');
 
-
-function OpenFile(files, callback){
-	if(files[0]){
-		var name = files[0].name;
-		var reader = new FileReader();
-		
-		reader.onload = function(e){
-			var file = JSON.parse(e.target.result);
-			file.name = name;
-			callback(file);
-		};
-		reader.readAsText(files[0]);
-	}
+function Open(file, callback){
+	var reader = new FileReader();
+	
+	reader.onload = function(e){
+		file.content = e.target.result;
+		file.name = name;
+		callback(file);
+	};
+	reader.readAsText(file);
 }
+
+function Save(name, text){
+	var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+	FileSaver.saveAs(blob, name);
+}
+
+module.exports = {save: Save, open: Open};

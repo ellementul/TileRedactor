@@ -1,3 +1,5 @@
+const Files = require("./SysFiles.js");
+
 var Tilesets = [];
 var Map = Array.create(Array.create.bind(null, null, 20), 20);
 
@@ -7,29 +9,12 @@ function CrLogic(Draw){
 
 	var switchSpace = false;
 	
-	this.addTileset = function(Tileset){
-		var objs = [];
-		var tiles = [];
-
-		Tileset.tiles.forEach(function(tile, id){
-			if(tile.type != "phisic")
-				tile.id = tiles.push(tile) - 1;
-			else
-				tile.id = objs.push(tile) - 1;
+	this.addTileset = function(file){
+		Files.open(file, function(file){
+			var tileset = JSON.parse(file.content);
+			tileset.name = file.name;
+			addTileset(tileset);
 		});
-
-		var ObjSet = Object.assign({}, Tileset);
-		ObjSet.tiles = objs;
-
-		Tileset.tiles = tiles;
-
-		console.log(Tileset, ObjSet);
-
-		Tileset.id = Tilesets.add(Tileset);
-		Draw.tiles.add(Tileset);
-
-		ObjSet.id = Tilesets.add(ObjSet);
-		Draw.objects.add(ObjSet);
 	}
 
 	this.switchSpace = function(){
@@ -65,6 +50,30 @@ function CrLogic(Draw){
 			fill(beg, end);
 		}
 
+	}
+	function addTileset(Tileset){
+		var objs = [];
+		var tiles = [];
+
+		Tileset.tiles.forEach(function(tile, id){
+			if(tile.type != "phisic")
+				tile.id = tiles.push(tile) - 1;
+			else
+				tile.id = objs.push(tile) - 1;
+		});
+
+		var ObjSet = Object.assign({}, Tileset);
+		ObjSet.tiles = objs;
+
+		Tileset.tiles = tiles;
+
+		console.log(Tileset, ObjSet);
+
+		Tileset.id = Tilesets.add(Tileset);
+		Draw.tiles.add(Tileset);
+
+		ObjSet.id = Tilesets.add(ObjSet);
+		Draw.objects.add(ObjSet);
 	}
 
 	function fill(beg, end){

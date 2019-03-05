@@ -1,6 +1,6 @@
 const Hear = require("./Events.js");
 
-module.exports = function(Logic, Draw){
+module.exports = function(Logic){
 
 	
 	Hear("switchAct", "click", function(){
@@ -21,7 +21,10 @@ module.exports = function(Logic, Draw){
 		}
 	});
 	
-	Hear("Add", "change", Draw.openJSON(Logic.addTileset));
+	Hear("Add", "change", function(){
+		if(this.files[0]) 
+			Logic.addTileset(this.files[0]);
+	});
 	
 	var cursorLine = null;
 	
