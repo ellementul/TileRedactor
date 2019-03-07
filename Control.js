@@ -40,6 +40,9 @@ module.exports = function(Logic){
 
 		cursorLine = null;
 	});
+
+
+	Hear("saveMap", "click", Logic.save);
 	
 };
 
