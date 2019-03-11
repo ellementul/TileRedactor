@@ -1,6 +1,7 @@
 const Files = require("./SysFiles.js");
 
 var Tilesets = [];
+var ObjSet = [];
 var Ground = Array.create(Array.create.bind(null, null, 20), 20);
 var Objects = Array.create(Array.create.bind(null, null, 20), 20);
 
@@ -20,6 +21,12 @@ function CrLogic(Draw){
 			var tileset = JSON.parse(file.content);
 			tileset.name = file.name;
 			addTileset(tileset);
+		});
+	}
+
+	this.open = function(file){
+		Files.open(file, function(file){
+			openMap(file.name, JSON.parse(file.content));
 		});
 	}
 
@@ -54,11 +61,11 @@ function CrLogic(Draw){
 	function SaveMap(Ground, Objs){
 
 		var TilesMap = {
-			ground: sortOutForSave(Ground, new Set(), new Set()),
-			objs: sortOutForSave(Objs, new Set(), new Set())
+			ground: sortOutForSave(Ground, [], new Set()),
+			objs: sortOutForSave(Objs, [], new Set())
 		};
 
-		Files.save("map.json", JSON.stringify(TilesMap));
+		Files.save("map.json", JSON.stringify(TilesMap, null, 2));
 		
 	}
 
@@ -66,17 +73,46 @@ function CrLogic(Draw){
 		map.forEach((line)=>{
 			line.forEach((box)=>{
 				if(box){
-					tile_types.add(box.tile);
+					if(tile_types.indexOf(box.tile) === -1)
+						tile_types.push(box.tile);
+
 					var save_box = Object.assign({}, box);
 
-					save_box.tile = tile_types.has(box.tile);
+					save_box.tile = tile_types.indexOf(box.tile);
 					boxs.add(save_box);
 				}
 			});
 		});
 
-		return {tile_types: Array.from(tile_types), boxs: Array.from(boxs)};
+		function compareZIndex(a, b) {
+  			return a.z_index - b.z_index;
+		}
+
+		return {tile_types: tile_types, boxs: Array.from(boxs).sort(compareZIndex)};
 	}
+
+	function openMap(name, map){
+
+		var tileset = {tiles: map.ground.tile_types, name: name};
+		var categ_ground = Tilesets.add(tileset);
+		tileset.id = categ_ground;
+		Draw.tiles.add(tileset);
+
+		tileset = {tiles: map.objs.tile_types, name: name};
+		var categ_objs = Tilesets.add(tileset);
+		tileset.id = categ_objs;
+		Draw.objects.add(tileset);
+
+		map.ground.boxs.forEach(box => {
+			 drawTile(Ground, box.x, box.y, Tilesets[categ_ground].tiles[box.tile]);
+		});
+
+		map.objs.boxs.forEach(box => {
+			 drawTile(Objects, box.x, box.y, Tilesets[categ_objs].tiles[box.tile]);
+		});
+	}
+
+
 
 	/**
 	*Functions change Ground or Objects
@@ -202,6 +238,25 @@ function CrLogic(Draw){
 		}
 		
 		Draw.remove(box);
+	}
+
+	function ClearSpaces(){
+		Ground = Array.create(Array.create.bind(null, null, 20), 20);
+		Objects = Array.create(Array.create.bind(null, null, 20), 20);
+
+		Draw.ground.clear();
+		Draw.boxs.clear(); 
+	}
+
+	function ClearTilesets(){
+		Tilesets = [];
+		current_tile = null;
+		current_objs = null;
+
+		Draw.tiles.clear();
+		Draw.objects.clear();
+		Draw.pallet.clear();
+
 	}
 }
 

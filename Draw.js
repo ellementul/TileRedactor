@@ -32,6 +32,15 @@ function CrSpace(id_map, size){
 		coord_arr_tiles[box.x][box.y].remove();
 		coord_arr_tiles[box.x][box.y] = null;
 	}
+
+	this.clear = function(){
+		coord_arr_tiles.forEach(line => {
+			line.forEach(elem => {
+				if(elem) elem.remove();
+			})
+		});
+		coord_arr_tiles = Array.create(Array.create.bind(null, null, 20), 20);
+	}
 	
 	function NormTile(tile){
 		var box = getComputedStyle(tile);
@@ -57,6 +66,12 @@ function CrTiles(id_container){
 		var categ = drawCateg(Tileset);
 		container.appendChild(categ);
 	}
+
+	this.clear = function(){
+		container.children.forEach(elem =>{
+			if(elem) elem.remove();
+		});
+	}
 }
 
 function CrPallet(){
@@ -68,13 +83,18 @@ function CrPallet(){
 
 		container.appendChild(drawTile(tile));
 	}
+
+	this.clear = function(){
+		if(container.children[0]) 
+			container.children[0].remove();
+	}
 }
 
 function appendTile(tile, x, y){
 	if(tile.durability) 
 		this.boxs.add(tile, x, y);
 	else
-		this.map.add(tile, x, y);
+		this.ground.add(tile, x, y);
 }
 
 function removeTile(box){
@@ -87,7 +107,7 @@ function removeTile(box){
 drawGrid(getNode(id_grid), size);
 
  var Draw = {
-	map: new CrSpace(id_ground, size),
+	ground: new CrSpace(id_ground, size),
 	boxs: new CrSpace(id_boxs, size),
 	append: appendTile,
 	remove: removeTile,

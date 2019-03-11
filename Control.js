@@ -43,6 +43,11 @@ module.exports = function(Logic){
 
 
 	Hear("saveMap", "click", Logic.save);
+
+	Hear("Open", "change", function(){
+		if(this.files[0]) 
+			Logic.open(this.files[0]);
+	});
 	
 };
 
