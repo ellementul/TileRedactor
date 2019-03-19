@@ -39,6 +39,8 @@ p{
 
 	margin: 0 2vh;
 	
+	flex-shrink: 0;
+
 	width: 90vh;
 	height: 90vh;
 	
@@ -66,7 +68,7 @@ p{
 }
 
 .button{
-	width: 40vh;
+	width: 30vh;
 	
 	line-height: 100%;
 	

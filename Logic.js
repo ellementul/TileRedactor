@@ -5,11 +5,18 @@ var ObjSet = [];
 var Ground = Array.create(Array.create.bind(null, null, 20), 20);
 var Objects = Array.create(Array.create.bind(null, null, 20), 20);
 
-function CrLogic(Draw){
+
+
+function CrLogic(Draw, def_tileset){
 	var current_tile = null;
 	var current_objs = null;
 
 	var switchSpace = false;
+
+	if(typeof def_tileset == "object"){
+		def_tileset.name = "default";
+		addTileset(def_tileset);
+	}
 	
 	/**
 	*Functions Load and Save
